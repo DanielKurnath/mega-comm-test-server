@@ -14,7 +14,11 @@ class MegaHandler(socketserver.BaseRequestHandler):
             char = data.decode(errors="ignore")
             buffer += char
             if char == '\n':
-                logging.info(f"Received: {buffer.strip()}")
+                message = buffer.strip()
+                logging.info(f"Received: {message}")
+                if message == "CMD:RESET":
+                    logging.info(f"CMD:RESET received — closing connection from {self.client_address}")
+                    break  # Gracefully close connection
                 self.request.sendall(b'O')  # ACK
                 buffer = ""
 
